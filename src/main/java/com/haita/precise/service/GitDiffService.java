@@ -9,6 +9,7 @@ import com.haita.precise.util.FreeMarkerUtil;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -38,7 +39,7 @@ public class GitDiffService {
                     try (BufferedReader bufferedReader =
                                  new BufferedReader(
                                          new InputStreamReader(
-                                                 new FileInputStream(javaFile)));){
+                                                 new FileInputStream(javaFile),"UTF-8"));){
                         String temp = null;
                         int lineNumber =0;
                         FileHtmlGson gson = new FileHtmlGson();
@@ -76,7 +77,8 @@ public class GitDiffService {
                             gson.getLines().add(line);
                         }
 
-                        Writer outputStream = new FileWriter(new File("./html/"+name+".html"));
+                        Writer outputStream = new BufferedWriter(new OutputStreamWriter(
+                                new FileOutputStream(new File("./html/"+name+".html")),"UTF-8"));
                         FreeMarkerUtil.getTemplate("color.ftlh", gson, outputStream);
                         outputStream.flush();
                         outputStream.close();
@@ -146,7 +148,7 @@ public class GitDiffService {
         try (BufferedReader bufferedReader =
                      new BufferedReader(
                              new InputStreamReader(
-                                     new FileInputStream(f)));) {
+                                     new FileInputStream(f),"UTF-8"));) {
             String temp = null;
             String fileName = null;
             String fileFormer = null;
